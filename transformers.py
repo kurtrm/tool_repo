@@ -34,11 +34,9 @@ class ReturnDataFrame(BaseEstimator, TransformerMixin):
     For additional exploration after going through a pipeline,
     transforms the array back into a pandas dataframe.
     """
-    def __init__(self,
-                 attributes_names: list,
-                 array: np.ndarray):
+    def __init__(self, attributes_names: list):
         """Initialize the selector with a list of attribut names."""
-        self.array = array
+        self.attributes_names = attributes_names
 
     def fit(self, X: np.ndarray, y: np.ndarray=None):
         """Fit the data."""
@@ -47,4 +45,4 @@ class ReturnDataFrame(BaseEstimator, TransformerMixin):
     def transform(self, X: np.ndarray) -> pd.core.frame.DataFrame:
         """Return the numpy arrays
         for use in sklearn."""
-        return pd.DataFrame(self.array, columns=self.attributes_names)
+        return pd.DataFrame(X, columns=self.attributes_names)
