@@ -8,12 +8,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-class ROC_AUC:
+class ROCAndAUC:
     """
     Provides an interace to compute ROC and AUC,
     and to plot their graphs.
     """
-    def __init__(self, probabilities, labels):
+    def __init__(self, probabilities: np.ndarray, labels: np.ndarray) -> None:
         """
         Initialize ROC/AUC, takes an array of probabilities
         and an array of labels (actual values).
@@ -69,7 +69,7 @@ class ROC_AUC:
         else:
             return -trapz(TPRs, FPRs)  # Why negative? Dunno.
 
-    def _scratch_riemann(self, tprs: np.array, fprs: np.array) -> float:
+    def _scratch_riemann(self, tprs: np.ndarray, fprs: np.ndarray) -> float:
         """
         Private method for calculating a rough value for the
         auc.
