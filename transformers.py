@@ -5,6 +5,7 @@ Sklearn pipelines.
 from sklearn.base import BaseEstimator, TransformerMixin
 
 import numpy as np
+import pandas as pd
 
 
 class DataFrameSelector(BaseEstimator, TransformerMixin):
@@ -14,15 +15,36 @@ class DataFrameSelector(BaseEstimator, TransformerMixin):
     Follows sklearn design patterns containing fit() and
     transform() methods.
     """
-    def __init__(self, attributes_names: list) -> np.ndarray:
+    def __init__(self, attributes_names: list):
         """Initialize the selector with a list of attribut names."""
         self.attributes_names = attributes_names
 
-    def fit(self, X, y=None):
+    def fit(self, X: np.ndarray, y: np.ndarray=None):
         """Fit the data."""
         return self
 
-    def transform(self, X):
+    def transform(self, X) -> np.ndarray:
         """Return the selected columns as numpy arrays
         for use in sklearn."""
         return X[self.attributes_names].values
+
+
+class ReturnDataFrame(BaseEstimator, TransformerMixin):
+    """
+    For additional exploration after going through a pipeline,
+    transforms the array back into a pandas dataframe.
+    """
+    def __init__(self,
+                 attributes_names: list,
+                 array: np.ndarray):
+        """Initialize the selector with a list of attribut names."""
+        self.array = array
+
+    def fit(self, X: np.ndarray, y: np.ndarray=None):
+        """Fit the data."""
+        return self
+
+    def transform(self, X: np.ndarray) -> pd.core.frame.DataFrame:
+        """Return the numpy arrays
+        for use in sklearn."""
+        return pd.DataFrame(self.array, columns=self.attributes_names)
