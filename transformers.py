@@ -46,3 +46,42 @@ class ReturnDataFrame(BaseEstimator, TransformerMixin):
         """Return the numpy arrays
         for use in sklearn."""
         return pd.DataFrame(X, columns=self.attributes_names)
+
+
+"""
+This class below may become a common pattern.
+Given a column with more than 3 or 4 categories, it may make sense
+to aggregate categories into one.
+
+In this case, there was 'Medium', 'Large', and 'Large / Medium' cateogries.
+Looking at their means, mins, and maxs, they did not seem statistically
+different, and the 'Large / Medium' category significantly outnumbered
+the other two combined.
+"""
+
+
+class CategoricalAggregator(BaseEstimator, TransformerMixin):
+    """
+    Aggregate categories that aren't dissimilar,
+    meant for a specific column.
+    """
+
+    def fit(self, X, y=None):
+        """Fit the data."""
+        return self
+
+    def transform(self, X):
+        """Return the selected columns as numpy arrays
+        for use in sklearn."""
+        X[(X == 'Large') | (X == 'Medium')] = 'Large / Medium'
+        return X
+
+    def _to_large_medium(self, value):
+        """
+        Method to apply, aggregates 'Medium' and 'Large'
+        categorized data into the 'Large / Medium' category.
+        """
+        if value == 'Medium' or value == 'Large':
+            return 'Large / Medium'
+        else:
+            return value
