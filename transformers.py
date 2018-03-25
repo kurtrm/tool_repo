@@ -85,3 +85,46 @@ class CategoricalAggregator(BaseEstimator, TransformerMixin):
             return 'Large / Medium'
         else:
             return value
+
+
+class EquipmentAge(BaseEstimator, TransformerMixin):
+    """
+    Aggregate categories that aren't dissimilar,
+    meant for a specific column.
+    """
+
+    def fit(self, X, y=None):
+        """Fit the data."""
+        return self
+
+    def transform(self, X):
+        """Return the selected columns as numpy arrays
+        for use in sklearn."""
+        X[(X == 'Large') | (X == 'Medium')] = 'Large / Medium'
+        return X
+
+    def _to_large_medium(self, value):
+        """
+        Method to apply, aggregates 'Medium' and 'Large'
+        categorized data into the 'Large / Medium' category.
+        """
+        if value == 'Medium' or value == 'Large':
+            return 'Large / Medium'
+        else:
+            return value
+
+
+class CategoricalImputer(BaseEstimator, TransformerMixin):
+    """
+    Custom imputer for replacing NaNs in categorical data.
+    """
+    def fit(self, X, y=None):
+        """Fit the data."""
+        return self
+
+    def transform(self, X):
+        """Return the selected columns as numpy arrays
+        for use in sklearn."""
+        series = pd.Series(X)
+        filled = series.fillna('Unknown')
+        return filled.values
