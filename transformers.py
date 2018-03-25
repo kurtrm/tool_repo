@@ -3,6 +3,7 @@ Module housing various transformers to be used in
 Sklearn pipelines.
 """
 from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.preprocessing import LabelBinarizer
 
 import numpy as np
 import pandas as pd
@@ -128,3 +129,18 @@ class CategoricalImputer(BaseEstimator, TransformerMixin):
         series = pd.Series(X)
         filled = series.fillna('Unknown')
         return filled.values
+
+
+class LabelBinarizerWrapper(BaseEstimator, TransformerMixin):
+    """
+    Hide the LabelBinarizer from the pipeline and do
+    the transformation in secret.
+    """
+    def fit(self, X, y=None):
+        """Fit the data."""
+        return self
+
+    def transform(self, X):
+        """Return the selected columns as numpy arrays
+        for use in sklearn."""
+        return LabelBinarizer().fit_transform(X)
