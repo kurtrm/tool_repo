@@ -144,3 +144,21 @@ class LabelBinarizerWrapper(BaseEstimator, TransformerMixin):
         """Return the selected columns as numpy arrays
         for use in sklearn."""
         return LabelBinarizer().fit_transform(X)
+
+
+class CombinedAttributes(BaseEstimator, TransformerMixin):
+    """
+    Turn salesdate and year made into age.
+    Return two columns, age and currentmeters.
+    """
+    def fit(self, X, y=None):
+        """Fit the data."""
+        return self
+
+    def transform(self, X):
+        """Return age with currentmeters."""
+        transformed = np.ones(X.shape)
+        transformed[:, 0] = pd.to_datetime(X[:, 1]).year - X[:, 0]
+        transformed[:, 1] = X[:, 2]
+
+        return transformed
